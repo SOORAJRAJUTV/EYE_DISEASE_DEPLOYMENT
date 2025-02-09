@@ -138,6 +138,6 @@ def generate_lime_explanation(model, image, explainer):
     return marked_explanation
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
 
 
