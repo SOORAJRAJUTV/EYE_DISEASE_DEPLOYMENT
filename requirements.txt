@@ -10,3 +10,4 @@ lime
 scikit-image
 gunicorn
 flask
+python-dotenv
