@@ -3,6 +3,13 @@ from PIL import Image
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 import tensorflow as tf
 import cv2
 import time
@@ -81,7 +88,9 @@ def uploaded_file(filename):
     print(filepath)
     model1 = ResNet50(NUMBER_OF_CLASSES)
     model_path = os.path.join(app.config['UPLOAD_FOLDER'], 'resnet50_model1.pth')
-    model1 = torch.load(model_path, map_location=torch.device('cpu'))
+    #model1 = torch.load(model_path, map_location=torch.device('cpu'))
+    model1 = torch.load(model_path, map_location=torch.device('cpu'), weights_only=False)
+
     model1.eval()
 
     input_tensor = load_single_image(filepath)
@@ -138,7 +147,5 @@ def generate_lime_explanation(model, image, explainer):
     return marked_explanation
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Render assigns a PORT dynamically
-    app.run(host="0.0.0.0", port=port)
-
-
+     port = int(os.getenv("PORT", 5000))  # Get PORT from .env, default to 4000
+     app.run(host="0.0.0.0", port=port)
