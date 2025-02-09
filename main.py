@@ -138,6 +138,7 @@ def generate_lime_explanation(model, image, explainer):
     return marked_explanation
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.environ.get("PORT", 5000))  # Render assigns a PORT dynamically
+    app.run(host="0.0.0.0", port=port)
 
 
