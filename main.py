@@ -21,6 +21,8 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 
+from xai import preprocess_image, generate_lime_explanation
+
 # Set the matplotlib backend to 'Agg' to avoid tkinter issues
 plt.switch_backend('Agg')
 
@@ -132,19 +134,6 @@ def uploaded_file(filename):
     plt.close()
     return render_template('nav.html', filename=filename, result=predicted_class, img=img_name)
 
-def preprocess_image(img):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = cv2.resize(img, (256, 256))
-    img = np.expand_dims(img, axis=0)
-    img = img.astype('float32') / 255
-    return img
-
-def generate_lime_explanation(model, image, explainer):
-    explanation = explainer.explain_instance(image[0].astype('double'), model.predict, top_labels=1, hide_color=0, num_samples=1000)
-    lime_explanation, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, num_features=5, hide_rest=False)
-    lime_explanation_rgb = gray2rgb(lime_explanation)
-    marked_explanation = mark_boundaries(image[0], mask)
-    return marked_explanation
 
 if __name__ == '__main__':
      port = int(os.getenv("PORT", 5000))  # Get PORT from .env, default to 4000
